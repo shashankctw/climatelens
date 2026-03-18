@@ -1,6 +1,7 @@
 from data.loader import DataLoader
 from config import DATA_FILE, REQUIRED_COLUMNS
 from features.build_features import preprocess_data, add_time_features
+from models.train import train_model
 
 
 def main():
@@ -13,6 +14,10 @@ def main():
 
     df = preprocess_data(df)
     df = add_time_features(df)
+    df = preprocess_data(df)
+    df = add_time_features(df)
+
+    model = train_model(df)
 
     print("Processed Data:")
     print(df.head())

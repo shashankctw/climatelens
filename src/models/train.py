@@ -5,7 +5,7 @@ from sklearn.metrics import mean_absolute_error
 
 def train_model(df: pd.DataFrame):
     # Features and target
-    X = df[['year', 'month']]
+    X = df[['year', 'month', 'lag_1', 'lag_2', 'lag_3']]
     y = df['temperature']
 
     # Time-based split (important)

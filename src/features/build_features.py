@@ -22,3 +22,10 @@ def add_time_features(df: pd.DataFrame) -> pd.DataFrame:
     df['month'] = df['date'].dt.month
 
     return df
+
+def add_lag_features(df, lags=[1, 2, 3]):
+    for lag in lags:
+        df[f"lag_{lag}"] = df['temperature'].shift(lag)
+
+    df = df.dropna()
+    return df

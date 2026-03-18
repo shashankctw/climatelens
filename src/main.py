@@ -3,6 +3,7 @@ from config import DATA_FILE, REQUIRED_COLUMNS
 from features.build_features import preprocess_data, add_time_features
 from models.train import train_model
 from features.build_features import add_lag_features
+from models.predict import forecast_future
 
 
 def main():
@@ -18,9 +19,14 @@ def main():
     df = add_time_features(df)
 
     model = train_model(df)
+    future = forecast_future(model, df)
 
     print("Processed Data:")
     print(df.head())
+
+    print("Future Predictions:")
+    for i, val in enumerate(future, 1):
+        print(f"Month {i}: {val:.2f}°C")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ from features.build_features import preprocess_data, add_time_features
 from models.train import train_model
 from features.build_features import add_lag_features
 from models.predict import forecast_future
+from visualization.plots import plot_predictions
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
 
     model = train_model(df)
     future = forecast_future(model, df)
+    plot_predictions(df, future)
 
     print("Processed Data:")
     print(df.head())

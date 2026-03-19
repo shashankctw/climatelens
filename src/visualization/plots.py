@@ -15,7 +15,13 @@ def plot_predictions(df, future_preds):
     last_year = df_yearly['year'].iloc[-1]
     future_years = [last_year + i for i in range(1, len(future_preds)+1)]
 
-    plt.plot(future_years, future_preds, linestyle='dashed', label="Forecast")
+   # convert monthly predictions → yearly average
+    future_avg = sum(future_preds) / len(future_preds)
+
+    last_year = df_yearly['year'].iloc[-1]
+    future_years = [last_year + 1]
+
+    plt.plot(future_years, [future_avg], 'ro', label="Forecast (Yearly Avg)")
 
     plt.legend()
     plt.title("Temperature Forecast (Smoothed)")

@@ -8,11 +8,11 @@ sys.path.append(SRC_PATH)
 import streamlit as st
 import pandas as pd
 
-from data.loader import DataLoader
-from features.build_features import preprocess_data, add_time_features, add_lag_features
-from models.train import train_model
-from models.predict import forecast_future
-from visualization.plots import plot_predictions
+from src.data.loader import DataLoader
+from src.features.build_features import preprocess_data, add_time_features, add_lag_features
+from src.models.train import train_model
+from src.models.predict import forecast_future
+from src.visualization.plots import plot_predictions
 
 
 # ------------------ PAGE CONFIG ------------------

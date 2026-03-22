@@ -2,14 +2,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plot_predictions(df, future_preds):
-    plt.figure(figsize=(10,5))
+    fig, ax = plt.subplots(figsize=(10,5))
 
     # yearly smoothing
     df_yearly = df.copy()
     df_yearly['year'] = df_yearly['date'].dt.year
     df_yearly = df_yearly.groupby('year')['temperature'].mean().reset_index()
 
-    plt.plot(df_yearly['year'], df_yearly['temperature'], label="Historical (Yearly Avg)")
+    ax.plot(df_yearly['year'], df_yearly['temperature'], label="Historical (Yearly Avg)")
 
     # future dates
     last_year = df_yearly['year'].iloc[-1]
@@ -21,11 +21,11 @@ def plot_predictions(df, future_preds):
     last_year = df_yearly['year'].iloc[-1]
     future_years = [last_year + 1]
 
-    plt.plot(future_years, [future_avg], 'ro', label="Forecast (Yearly Avg)")
+    ax.plot(future_years, [future_avg], 'ro', label="Forecast (Yearly Avg)")
 
-    plt.legend()
-    plt.title("Temperature Forecast (Smoothed)")
-    plt.xlabel("Year")
-    plt.ylabel("Temperature")
-    plt.tight_layout()
-    plt.show()
+    ax.legend()
+    ax.set_title("Temperature Forecast (Smoothed)")
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Temperature")
+    ax.set_xlim(df_yearly['year'].min(), future_years[-1])
+    return fig

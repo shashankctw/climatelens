@@ -2,30 +2,32 @@ import pandas as pd
 
 
 def forecast_future(model, df, steps=12):
-    future_preds = []
-
-    last_row = df.iloc[-1:].copy()
+    predictions = []
+    df_copy = df.copy()
 
     for _ in range(steps):
-        X = last_row[['year', 'month', 'lag_1', 'lag_2', 'lag_3']]
-        pred = model.predict(X)[0]
+        last = df_copy.iloc[-1]
 
-        future_preds.append(pred)
+        next_input = pd.DataFrame([{
+            "prev_temp_1": last["temperature"],
+            "prev_temp_2": last["prev_temp_1"],
+            "prev_temp_3": last["prev_temp_2"],
+            "year": last["year"],
+            "month": (last["month"] % 12) + 1
+        }])
 
-        # shift lags
-        last_row['lag_3'] = last_row['lag_2']
-        last_row['lag_2'] = last_row['lag_1']
-        last_row['lag_1'] = pred
+        pred = model.predict(next_input)[0]
+        predictions.append(pred)
 
-        # increment month
-        month = last_row['month'].values[0] + 1
-        year = last_row['year'].values[0]
+        new_row = {
+            "temperature": pred,
+            "prev_temp_1": next_input["prev_temp_1"].values[0],
+            "prev_temp_2": next_input["prev_temp_2"].values[0],
+            "prev_temp_3": next_input["prev_temp_3"].values[0],
+            "year": last["year"] + (1 if next_input["month"].values[0] == 1 else 0),
+            "month": next_input["month"].values[0]
+        }
 
-        if month > 12:
-            month = 1
-            year += 1
+        df_copy = pd.concat([df_copy, pd.DataFrame([new_row])], ignore_index=True)
 
-        last_row['month'] = month
-        last_row['year'] = year
-
-    return [float(x) for x in future_preds]
+    return predictions

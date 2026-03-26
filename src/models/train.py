@@ -1,31 +1,25 @@
-import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
 
 
-def train_model(df: pd.DataFrame):
-    # Features and target
-    X = df[['year', 'month', 'lag_1', 'lag_2', 'lag_3']]
+def train_model(df, model_type="Random Forest"):
+    X = df[['prev_temp_1', 'prev_temp_2', 'prev_temp_3', 'year', 'month']]
     y = df['temperature']
 
-    # Time-based split (important)
-    split_index = int(len(df) * 0.8)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, shuffle=False
+    )
 
-    X_train = X[:split_index]
-    X_test = X[split_index:]
+    if model_type == "Linear Regression":
+        model = LinearRegression()
+    else:
+        model = RandomForestRegressor(n_estimators=100, random_state=42)
 
-    y_train = y[:split_index]
-    y_test = y[split_index:]
-
-    # Model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
 
-    # Predict
     preds = model.predict(X_test)
-
-    # Evaluate
     mae = mean_absolute_error(y_test, preds)
-    print(f"MAE: {mae:.4f}")
 
-    return model
+    return model, mae

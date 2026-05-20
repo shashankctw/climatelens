@@ -41,7 +41,7 @@ future = forecast_future(model, df, steps)
 # Tabs
 tab1, tab2, tab3 = st.tabs(["📊 Prediction", "📈 Insights", "⚙️ How it Works"])
 
-# ---------- TAB 1 ----------
+# TAB 1
 with tab1:
     st.subheader("Temperature Forecast")
 
@@ -53,12 +53,10 @@ with tab1:
     fig = plot_predictions(df, future)
     st.plotly_chart(fig, use_container_width=True)
 
-# ---------- TAB 2 ----------
+# TAB 2
 with tab2:
     st.subheader("Insights")
 
-    # Historical change
-    
     df['Year'] = pd.to_datetime(df['date']).dt.year
 
     # First 10 years average
@@ -95,7 +93,7 @@ with tab2:
     else:
         st.write("• Noticeable variation expected in future temperatures")
 
-# ---------- TAB 3 ----------
+# TAB 3 
 with tab3:
     st.subheader("How It Works")
 

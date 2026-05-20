@@ -58,7 +58,17 @@ with tab2:
     st.subheader("Insights")
 
     # Historical change
-    historical_change = df['temperature'].iloc[-1] - df['temperature'].iloc[0]
+    
+    df['Year'] = pd.to_datetime(df['date']).dt.year
+
+    # First 10 years average
+    first_period = df[df['Year'] <= df['Year'].min() + 9]['temperature'].mean()
+
+    # Last 10 years average
+    last_period = df[df['Year'] >= df['Year'].max() - 9]['temperature'].mean()
+
+    # Historical change
+    historical_change = first_period - last_period
 
     # Forecast change
     future_change = future[-1] - df['temperature'].iloc[-1]
